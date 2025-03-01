@@ -1,1 +1,864 @@
-<h1>hello</h1>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="DSM: Building A Diverse Semantic Map for 3D Visual Grounding">
+  <meta name="keywords" content="DSM, 3D Visual Grounding, Semantic Map, 3D Vision, Computer Vision, Robotics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSM: Building A Diverse Semantic Map for 3D Visual Grounding</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+     /* 设置弹幕的样式 */
+     .bullet {
+            position: absolute;
+            font-size: 20px;
+            color: white;
+            text-shadow: 1px 1px 1px black;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+    .scrollable-container {
+      width: 100%;
+      height: 150px;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      overflow-y: hidden;
+      background-color: #f9f9f9;
+      position: relative;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .columns {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .column {
+      flex: 1;
+      margin: 0 10px;
+    }
+
+    .math-container {
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://keunhong.com">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+        </a>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://jackyzengl.github.io/GRID.github.io/">
+              GRID
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">DSM: Building A Diverse Semantic Map for 3D Visual Grounding</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://keunhong.com">Qinghongbing Xie</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://github.com/liang-zijian1">Zijian Liang</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://www.sigs.tsinghua.edu.cn/cl/main.htm">Long Zeng</a><sup>1,</sup>,
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Tsinghua University,</span>
+              <span class="author-block"><sup>2</sup>South China University of Technology</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2011.12948" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2011.12948" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Video Link. -->
+                <span class="link-block">
+                  <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/google/nerfies" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Dataset Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="far fa-images"></i>
+                    </span>
+                    <span>Data</span>
+                  </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-normal">
+          <h2 class="title is-3">Video</h2>
+          <div class="publication-video"
+            style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+            <video id="teaser" controls muted playsinline
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
+              poster="./static/images/video_cover.png">
+              <source src="./static/videos/main_v_x264.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              In recent years, with the growing research and
+              application of multimodal large-scale language models (VLMs)
+              in robotics. Existing approaches that use VLMs for 3D Visual
+              Grounding tasks often focus on obtaining scene information
+              through geometric transformations, overlooking the extrac-
+              tion of diverse semantic information from the scene and the
+              understanding of rich implicit semantic attributes, such as
+              appearance, physics and affordance. The 3D scene graph, which
+              combines geometry and language, is an ideal representation
+              method for environmental perception and serves as an effective
+              carrier for language models in 3D Visual Grounding tasks.
+              To address this, we propose a multi-attribute semantic map
+              construction method designed for robotic agents in 3D Visual
+              Grounding tasks. This method uses VLMs to capture the latent
+              semantic and relational attributes of objects within the scene,
+              and creates a Diverse Semantic Map (DSM) through a temporal
+              sliding window map construction strategy. We optimizes the
+              understanding of Grounding information based on DSM and
+              introduces a new approach called DSM-Grounding. Experimen-
+              tal results demonstrate that our method outperforms existing
+              approaches in tasks such as semantic segmentation and 3D
+              Visual Grounding. We also deployed the algorithm on a local
+              robot to validate its effectiveness.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Pipeline. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Pipeline</h2>
+          <div class="image" style=" display: flex; justify-content: center;">
+            <img src="./static/images/framework.png" alt="Framework Image" style="width: 1080px; height: auto;">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              After receiving the user's query, the robot first collects time-continuous poses, depth images, and color
+              images
+              of the scene to build a DSM. Next, we extract the visual and geometric information from each observation
+              point. At the same time, we use VLM to analyze
+              their relationships and semantic attributes, which are categorized into Appearance, Physical and
+              Affordance
+              Attributes. We fuse objects from multi views
+              using a multimodal object fusion method in conjunction with the Geometry Sliding Window method for
+              mapping.
+              Finally, we identify candidates in the
+              DSM based on the attributes and relationships of objects. We use the multi-level observations method to
+              precisely locate the target object. Additionally,
+              our method can be broadly applied to tasks such as robotic semantic navigation and semantic grasping
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Pipeline. -->
+    </div>
+  </section>
+
+<section class="section">
+    <div class="container is-max-desktop"  >
+    <h2 class="title is-3" style="text-align: center;">DSM Result (Replica)</h2>
+    <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+        <div class="column is-one-quarter">
+            <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src="static/videos/room0_2.mp4" type="video/mp4">
+            </video> -->
+            <img src="static/videos/room0_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+        </div>
+        <div class="column is-one-quarter">
+            <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src="static/videos/room1_1.mp4" type="video/mp4">
+            </video> -->
+            <img src="static/videos/room1_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+        </div>
+        <div class="column is-one-quarter">
+            <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src="static/videos/office0_2.mp4" type="video/mp4">
+            </video> -->
+            <img src="static/videos/office0_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+            
+        </div>
+        <div class="column is-one-quarter">
+            <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src="static/videos/office2_2.mp4" type="video/mp4">
+            </video> -->
+            <img src="static/videos/office2_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+    </div>
+
+    <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+        <!-- 第二行 -->
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/room0_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/room0_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+          
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/room1_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/room1_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/office0_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/office0_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/office2_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/office2_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+        </div>
+
+    </div>
+</div>
+
+</section>
+
+ 
+<section class="section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3" style="text-align: center;">DSM Result (Ai2thor)</h2>
+
+      <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+        <!-- 第一行 -->
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/plan10_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/plan10_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/plan12_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/plan12_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/Plan14_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/Plan14_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/plan15_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/plan15_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+    </div>
+
+        <!-- 第二行 -->
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/plan10_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/plan10_1.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/plan12_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/plan12_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/Plan14_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/Plan14_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+        <div class="column is-one-quarter">
+          <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+            <source src="static/videos/plan15_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video> -->
+          <img src="static/videos/plan15_2.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+        </div>
+      </div>
+    </div>
+</section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width" style="text-align: center;">
+          <h2 class="title is-3">DSM-Grounding Experiment</h2>
+            <p>Grounding result on Ai2thor</p>
+            <div class="image" style=" display: flex; justify-content: center;">
+            <img src="./static/images/ai2thor.png" alt="ai2thor" style="width: 100%; height: auto;">
+            </div>
+            <p>Grounding result on Replica</p>
+            <div class="image" style=" display: flex; justify-content: center;">
+
+            <img src="./static/images/ai2thor.png" alt="replica" style="width: 100%; height: auto;">
+            </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">DSM-Grounding Quality Result</h2>
+          <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\ai2thor_base.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+              <img src="static/videos/ai2thor_base.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\ai2thor_chair.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/ai2thor_chair.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\ai2thor_stove.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/ai2thor_stove.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\ai2thor_box.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/ai2thor_box.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </p>
+            </div>
+        </div>
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px; align-items: center;">
+            <div class="column is-one-quarter">
+                <p>Ai2thor FloorPlan10</p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>Please find the wooden chair with a curved backrest that has a simple design.</p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>Please locate the stove positioned on the counter, featuring multiple burners on top for cooking and an oven below for baking.</p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>Please locate the box used for organization and storage, which is positioned on the countertop next to the stove.</p>
+            </div>
+        </div>
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\replica_base.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+              <img src="static/videos/replica_base.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\replica_pillow.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+              <img src="static/videos/replica_pillow.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\replica_vase.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/replica_vase.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\replica_window.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/replica_window.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </p>
+            </div>
+        </div>
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px; align-items: center;">
+            <div class="column is-one-quarter">
+                <p>Replica room0                </p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>Please find the pillow used for providing cushioning and support, typically placed on the bed or sofa for comfort during sleep or relaxation.                </p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>Please find the vase used for holding flowers, which is made from sturdy ceramic and is placed on the dining table.
+                </p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>Please locate the window that allows light to flood the room, positioned above the desk organizer on the workspace.
+                </p>
+            </div>
+        </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Robot Experiment Result</h2>
+          <p>Robot grasping experiment</p>
+          <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\grasp_base.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/grasp_base.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+              
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\grasp_apple.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+              <img src="static/videos/grasp_apple.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+
+            <div class="column is-half">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\grasp_demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/grasp_demo.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </p>
+            </div>
+        </div>
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px; align-items: center;">
+            <div class="column is-one-quarter">
+                <p>Grasp DSM</p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>The red apple next to the white block</p>
+            </div>
+            <div class="column is-half">
+                <p>Real Grasp</p>
+            </div>
+        </div>
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px;">
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\navigation_base.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/navigation_base.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+
+            </div>
+            <div class="column is-one-quarter">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\navigation_book.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+              <img src="static/videos/navigation_book.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </div>
+
+            <div class="column is-half">
+              <!-- <video autoplay muted playsinline loop style="width: 100%; height: 250px; object-fit: cover;">
+                <source src=".\static\videos\navigation_demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video> -->
+          <img src="static/videos/navigation_demo.gif" alt="Room Animation" style="width: 100%; height: 250px; object-fit: cover;">
+
+            </p>
+            </div>
+        </div>
+        <div class="columns is-flex" style="flex-wrap: nowrap; gap: 10px; align-items: center;">
+            <div class="column is-one-quarter">
+                <p>Navigation DSM</p>
+            </div>
+            <div class="column is-one-quarter">
+                <p>The blue book on the table</p>
+            </div>
+            <div class="column is-half">
+                <p>Simulator Navigation</p>
+            </div>
+        </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+
+
+
+  <!-- <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+    </div>
+  </section> -->
+
+
+  <footer class="footer">
+    <div class="container  is-max-desktop">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="./static/videos/nerfies_paper.pdf">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              This means you are free to borrow the <a href="https://github.com/nerfies/nerfies.github.io">source
+                code</a> of this website,
+              we just ask that you link back to this page in the footer.
+              Please remember to remove the analytics code included in the header of the website which
+              you do not want on your website.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+<script>
+    // 获取弹幕容器
+    var container_replica = document.getElementById('replica_dsm');
+    // 定义弹幕数据
+    var data = [
+        { text: '这是第一条弹幕', color: 'red' },
+        { text: '这是第二条弹幕', color: 'green' },
+        { text: '这是第三条弹幕', color: 'blue' }
+    ];
+    // 定义弹幕速度
+    var speed = 2;
+    // 定义弹幕间隔
+    var interval = 1000;
+    // 定义弹幕位置
+    var topArr = [];
+    for (var i = 0; i < 10; i++) {
+        topArr.push(i * 30);
+    }
+    // 定义弹幕索引
+    var index = 0;
+    // 定义弹幕定时器
+    var timer_replica = setInterval(function() {
+        // 获取弹幕数据
+        var bullet = data[index];
+        // 创建弹幕元素
+        var span = document.createElement('span');
+        span.className = 'bullet';
+        span.innerText = bullet.text;
+        span.style.color = bullet.color;
+        // 随机获取弹幕位置
+        var top = topArr[Math.floor(Math.random() * topArr.length)];
+        span.style.top = top + 'px';
+        // 将弹幕元素添加到容器中
+        container_replica.appendChild(span);
+        // 计算弹幕宽度
+        var width = span.offsetWidth;
+        // 定义弹幕起始位置
+        var left = container_replica.offsetWidth;
+        span.style.left = left + 'px';
+        // 定义弹幕移动定时器
+        var bulletTimer = setInterval(function() {
+            // 计算弹幕当前位置
+            left -= speed;
+            span.style.left = left + 'px';
+            // 判断弹幕是否移出容器
+            if (left < -width) {
+                // 移除弹幕元素
+                container_replica.removeChild(span);
+                // 清除弹幕移动定时器
+                clearInterval(bulletTimer);
+            }
+        }, 10);
+        // 更新弹幕索引
+        index++;
+        if (index >= data.length) {
+            index = 0;
+        }
+    }, interval);
+
+   
+</script>
+<script>
+    // 获取弹幕容器
+    var container_ai2thor = document.getElementById('ai2thor_dsm');
+    // 定义弹幕数据
+    var data_ai2 = [
+        { text: '这是第一条弹幕', color: 'red' },
+        { text: '这是第二条弹幕', color: 'green' },
+        { text: '这是第三条弹幕', color: 'blue' }
+    ];
+    // 定义弹幕速度
+    var speed_ai2 = 2;
+    // 定义弹幕间隔
+    var interval_ai2 = 1000;
+    // 定义弹幕位置
+    var topArr_ai2 = [];
+    for (var i = 0; i < 10; i++) {
+        topArr.push(i * 30);
+    }
+    // 定义弹幕索引
+    var index_ai2 = 0;
+    // 定义弹幕定时器
+    
+
+    var timer_ai2thor = setInterval(function() {
+        // 获取弹幕数据
+        var bullet = data[index];
+        // 创建弹幕元素
+        var span = document.createElement('span');
+        span.className = 'bullet';
+        span.innerText = bullet.text;
+        span.style.color = bullet.color;
+        // 随机获取弹幕位置
+        var top = topArr[Math.floor(Math.random() * topArr.length)];
+        span.style.top = top + 'px';
+        // 将弹幕元素添加到容器中
+        container_ai2thor.appendChild(span);
+        // 计算弹幕宽度
+        var width = span.offsetWidth;
+        // 定义弹幕起始位置
+        var left = container_ai2thor.offsetWidth;
+        span.style.left = left + 'px';
+        // 定义弹幕移动定时器
+        var bulletTimer = setInterval(function() {
+            // 计算弹幕当前位置
+            left -= speed;
+            span.style.left = left + 'px';
+            // 判断弹幕是否移出容器
+            if (left < -width) {
+                // 移除弹幕元素
+                container_ai2thor.removeChild(span);
+                // 清除弹幕移动定时器
+                clearInterval(bulletTimer);
+            }
+        }, 10);
+        // 更新弹幕索引
+        index++;
+        if (index >= data.length) {
+            index = 0;
+        }
+    }, interval);
+</script>
+
+<script>
+    function autoScroll(containerId) {
+      const scrollable = document.getElementById(containerId);
+      let scrollAmount = 0;
+
+      function scrollStep() {
+        if (scrollAmount < scrollable.scrollHeight - scrollable.clientHeight) {
+          scrollAmount += 1;
+          scrollable.scrollTop = scrollAmount;
+        } else {
+          scrollAmount = 0;
+          scrollable.scrollTop = 0;
+        }
+      }
+
+      setInterval(scrollStep, 50);
+    }
+
+    window.onload = function () {
+      autoScroll('scrollable1');
+      autoScroll('scrollable2');
+      autoScroll('scrollable3');
+      autoScroll('scrollable4');
+    };
+  </script>
+
+
+</html>
